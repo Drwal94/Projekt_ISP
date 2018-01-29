@@ -106,47 +106,6 @@ def postAngles():
                    avg=avg,
                    trend=trend)
 
-@app.route('/postDataset/', methods = ["POST"])
-def postDataset():
-    cnx = sql.connect("localhost", "root", "ksemwetipg", "mydb")
-    cursor = cnx.cursor()
-    query = "select * from servo"
-    cursor.execute(query)
-    result = cursor.fetchall()
-
-    i = 0
-    data = []
-    date = []
-    avg = []
-    x = []
-    trend = []
-    # Getting last index from database
-    if (not (len(result) == 0)):
-        for r in result:
-            data.append(r[1])
-            date.append(r[2])
-
-    average = sum(data)/len(data)
-    for i in range(0, len(data)):
-        avg.append(average)
-        x.append(i)
-
-
-    z = numpy.polyfit(x, data, 1)
-    p = numpy.poly1d(z)
-    tr = p(x)
-    for t in tr:
-        trend.append(t)
-
-    cnx.commit()
-
-    cursor.close()
-    cnx.close()
-    return jsonify(data = data,
-                   date = date,
-                   avg = avg,
-                   trend = trend)
-
 
 if __name__ == '__main__':
     app.run(host=ip_adress)
