@@ -8,13 +8,10 @@
 boolean incoming = 0;
 
 // Enter a MAC address and IP address for your controller below.
-// The IP address will be dependent on your local network:
 byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDA, 0x02 };
-IPAddress ip(192,168,0,25); //<<< ENTER YOUR IP ADDRESS HERE!!!
+IPAddress ip(192,168,0,25);
 
 // Initialize the Ethernet server library
-// with the IP address and port you want to use 
-// (port 80 is default for HTTP):
 EthernetServer server(80);
 EthernetClient client;
 Servo myservo;
@@ -35,13 +32,8 @@ void setup()
 void loop()
 {
   
-  //Serial.println("hahaha");
-  // listen for incoming clients
-  
   EthernetClient client2 = server.available();
   if (client2) {
-    
-    // an http request ends with a blank line
     boolean currentLineIsBlank = true;
     int index = 0;
     int linia = 0;
@@ -53,16 +45,10 @@ void loop()
     while (client2.connected()) {
       if (client2.available()) {
         char c = client2.read();
-        // if you've gotten to the end of the line (received a newline
-        // character) and the line is blank, the http request has ended,
-        // so you can send a reply
-        //Serial.println(c);
         
         if (c != '\n' && c != '\r') {
           clientline[index] = c;
           index++;
-          //Serial.println(index);
-          // are we too big for the buffer? start tossing out data
           if (index >= BUFSIZe)
             index = BUFSIZe -1;
 
@@ -70,7 +56,6 @@ void loop()
           continue;
         }else{
           linia++;
-          //Serial.println(clientline);
           if(strstr(clientline, "angle=") == 0)
             for(int i = 0;i<100;i++)
             clientline[i] = ' ';
